@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "doctor": {
+      "title": "Doctor",
+      "description": "Doctor profile with specialisation, working hours, slot duration, and leaves.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Doctor document ID." },
+        "name": { "type": "string", "description": "Doctor's name." },
+        "email": { "type": "string", "description": "Doctor's email address." },
+        "specialisation": { "type": "string", "description": "Area of medicine." },
+        "workingHoursStart": { "type": "string", "description": "Start of working hours (HH:MM)." },
+        "workingHoursEnd": { "type": "string", "description": "End of working hours (HH:MM)." },
+        "slotDuration": { "type": "integer", "description": "Duration of each slot in minutes." },
+        "leaveDays": { "type": "array", "description": "Dates the doctor is on leave (YYYY-MM-DD)." }
+      },
+      "required": ["name", "email", "specialisation", "workingHoursStart", "workingHoursEnd", "slotDuration"]
+    },
+    "patient": {
+      "title": "Patient",
+      "description": "Patient registration profile.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Patient's Firebase UID." },
+        "name": { "type": "string", "description": "Patient's full name." },
+        "email": { "type": "string", "description": "Patient's email address." },
+        "createdAt": { "type": "string", "description": "Timestamp of patient profile creation." }
+      },
+      "required": ["name", "email", "createdAt"]
+    },
+    "appointment": {
+      "title": "Appointment",
+      "description": "Healthcare appointment booking details with pre-visit and post-visit records.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Appointment document ID." },
+        "doctorId": { "type": "string", "description": "Reference to doctor." },
+        "doctorName": { "type": "string", "description": "Cached name of the doctor." },
+        "doctorEmail": { "type": "string", "description": "Cached email of the doctor." },
+        "patientId": { "type": "string", "description": "Reference to patient (user UID)." },
+        "patientName": { "type": "string", "description": "Cached name of the patient." },
+        "patientEmail": { "type": "string", "description": "Cached email of the patient." },
+        "date": { "type": "string", "description": "Appointment date (YYYY-MM-DD)." },
+        "slot": { "type": "string", "description": "Appointment starting slot time (HH:MM)." },
+        "symptoms": { "type": "string", "description": "Patient-provided symptoms before visit." },
+        "urgency": { "type": "string", "description": "AI-calculated symptom urgency (Low / Medium / High)." },
+        "preVisitSummary": { "type": "string", "description": "AI-generated pre-visit summary." },
+        "clinicalNotes": { "type": "string", "description": "Doctor's post-visit clinical notes." },
+        "prescription": { "type": "string", "description": "Doctor's post-visit prescription details." },
+        "postVisitSummary": { "type": "string", "description": "AI-generated patient-friendly summary with medication schedule." },
+        "status": { "type": "string", "enum": ["booked", "cancelled", "completed"], "description": "Status of the appointment." },
+        "calendarEventId": { "type": "string", "description": "Google Calendar event ID." },
+        "createdAt": { "type": "string", "description": "Creation timestamp." },
+        "updatedAt": { "type": "string", "description": "Modification timestamp." }
+      },
+      "required": ["doctorId", "patientId", "date", "slot", "status", "createdAt"]
+    },
+    "reminder": {
+      "title": "Reminder",
+      "description": "Medication or appointment notifications.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Reminder document ID." },
+        "appointmentId": { "type": "string", "description": "Reference to appointment." },
+        "patientId": { "type": "string", "description": "Reference to patient." },
+        "doctorName": { "type": "string", "description": "Name of prescribing doctor." },
+        "medication": { "type": "string", "description": "Prescribed medicine details." },
+        "frequency": { "type": "string", "description": "Frequency (e.g. daily, twice daily)." },
+        "nextRun": { "type": "string", "description": "Next reminder timestamp." },
+        "status": { "type": "string", "enum": ["active", "sent", "cancelled"], "description": "Status of the reminder." }
+      },
+      "required": ["appointmentId", "patientId", "medication", "status"]
+    },
+    "admin": {
+      "title": "Admin",
+      "description": "White-listed admin users.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "description": "Admin email." }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "doctors/{doctorId}": {
+      "schema": "doctor",
+      "description": "Doctors collection managed by admin."
+    },
+    "patients/{patientId}": {
+      "schema": "patient",
+      "description": "Patients collection."
+    },
+    "appointments/{appointmentId}": {
+      "schema": "appointment",
+      "description": "Appointments booked by patients and accessed by doctors/patients/admins."
+    },
+    "reminders/{reminderId}": {
+      "schema": "reminder",
+      "description": "Reminders generated for medications."
+    },
+    "admins/{adminId}": {
+      "schema": "admin",
+      "description": "Admins mapping document."
+    }
+  }
+}

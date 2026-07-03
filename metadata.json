@@ -1,0 +1,6 @@
+{
+  "name": "Healthcare Appointment & Follow-up Manager",
+  "description": "A comprehensive healthcare appointment manager that allows patients to search doctors, book appointments, share symptoms, and receive AI-generated pre-visit summaries, post-visit summaries, email notifications, and Google Calendar syncing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

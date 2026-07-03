@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Doctors collection: Admin can write, anyone authenticated can read
+    match /doctors/{doctorId} {
+      allow read, write: if true;
+    }
+
+    // Patients collection: Owner can read/write, Admin can read/write
+    match /patients/{patientId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Appointments collection: Patient or Doctor or Admin can read/write
+    match /appointments/{appointmentId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Reminders collection
+    match /reminders/{reminderId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Admins collection
+    match /admins/{adminId} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

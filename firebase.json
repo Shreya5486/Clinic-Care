@@ -1,0 +1,8 @@
+{
+  "firestore": [
+    {
+      "database": "ai-studio-healthcareappoin-195ffe0c-4ff6-44c3-a64e-88eeb70717c6",
+      "rules": "firestore.rules"
+    }
+  ]
+}
